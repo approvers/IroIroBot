@@ -1,10 +1,13 @@
 import discord
+import random
 
 
 
 class MessageReceiver:
-    def __init__(self, client:discord.Client):
-        self.client = client
+    def __init__(self, send_channel, voice_channel):
+        self.send_channel = send_channel
+        self.voice_channel = voice_channel
+        self.dm_channel = None
         self.meigen_list = []
 
     async def receive(self, message:discord.Message):
@@ -34,6 +37,7 @@ class MessageReceiver:
                 text = ""
                 for meigen in self.meigen_list:
                     text += meigen
+                
                 await message.channel.send(text)
                 return
 
@@ -45,4 +49,14 @@ class MessageReceiver:
             self.meigen_list.append(meigen)
 
             await message.channel.send(meigen)
-            await self.client.dm_channel.send(meigen)
+            await self.dm_channel.send(meigen)
+            
+    async def random_event(self):
+        if len(self.voice_channel.members) == 0:
+            return
+
+        if len(self.meigen_list) < 1:
+            return
+
+        content = random.choice(self.meigen_list)
+        await self.send_channel.send(content)
