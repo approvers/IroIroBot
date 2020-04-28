@@ -53,10 +53,13 @@ class MessageReceiver:
             
     async def random_event(self):
         if len(self.voice_channel.members) == 0:
+            print("だれもいない…")
             return
 
         if len(self.meigen_list) < 1:
+            print("名言がない…")
             return
 
+        print("名言を送信！")
         content = random.choice(self.meigen_list)
         await self.send_channel.send(content)
