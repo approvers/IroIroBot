@@ -4,10 +4,10 @@ import random
 
 
 class MessageReceiver:
-    def __init__(self, send_channel, voice_channel):
+    def __init__(self, send_channel, voice_channel, dm_channel):
         self.send_channel = send_channel
         self.voice_channel = voice_channel
-        self.dm_channel = None
+        self.dm_channel = dm_channel
         self.meigen_list = []
 
     async def receive(self, message:discord.Message):
