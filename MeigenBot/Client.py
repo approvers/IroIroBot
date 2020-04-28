@@ -37,6 +37,6 @@ class Client(discord.Client):
     async def on_message(self, message):
         await self.message_receiver.receive(message)
 
-    @tasks.loop(minutes=60)
+    @tasks.loop(minutes=)
     async def hour_loop(self):
         await self.message_receiver.random_event()
