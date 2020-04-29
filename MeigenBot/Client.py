@@ -26,6 +26,8 @@ class Client(discord.Client):
         self.message_receiver = MessageReceiver(send_channel, voice_channel, dm_channel)
 
         async for message in dm_channel.history(limit=10):
+            if len(message.content) > 100:
+                continue
             self.message_receiver.meigen_list.insert(0, message.content)
         
         self.hour_loop.start()
