@@ -42,6 +42,15 @@ class MessageReceiver:
                 return
 
 
+            if len(message.content) > 100:
+                await message.channel.send(
+                    "```"
+                    " †キレた† \n"
+                    "   100文字以内にしろよカス\n"
+                    "```"
+                )
+                return
+            
             if len(self.meigen_list) >= 5:
                 self.meigen_list = self.meigen_list[1:]
 
