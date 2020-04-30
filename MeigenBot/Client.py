@@ -12,30 +12,30 @@ class Client(discord.Client):
 
     def __init__(self):
         super().__init__()
-
-        self.message_receiver = MessageReceiver(self)
-
     
     def run(self):
         super().run(Client.__TOKEN)
 
     async def on_ready(self):
-        self.minute_loop.start()
-
-        my_id = 603487410487296000
-        my_user = super().get_user(my_id)
-
+        send_channel = self.get_channel(690909527461199922)
+        voice_channel = self.get_channel(683939861539192865)
+        my_user = self.get_user(603487410487296000)
         if my_user.dm_channel is None:
             await my_user.create_dm()
+        dm_channel = my_user.dm_channel
+        self.message_receiver = MessageReceiver(send_channel, voice_channel, dm_channel)
 
-        self.dm_channel = my_user.dm_channel
-        
-        async for message in self.dm_channel.history(limit=5):
+        async for message in dm_channel.history(limit=10):
+            if len(message.content) > 100:
+                continue
             self.message_receiver.meigen_list.insert(0, message.content)
+        
+        send_channel.send("おっぱい！（再起動）")
+        self.hour_loop.start()
 
     async def on_message(self, message):
         await self.message_receiver.receive(message)
 
-    @tasks.loop(seconds=60)
-    async def minute_loop(self):
-        pass
+    @tasks.loop(minutes=60)
+    async def hour_loop(self):
+        await self.message_receiver.random_event()
