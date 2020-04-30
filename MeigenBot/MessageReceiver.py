@@ -14,7 +14,16 @@ class MessageReceiver:
         if message.author.bot:
             return
 
-        words = message.content.split()
+        content = message.content
+
+        if "なん" in content or "何" in content or "ナン" in content:
+            nans = ["ナン！", "ナンですね", "ナンじゃん", "ナン！？","ん？今ナンって言ったよね？", "NaN"]
+            await message.channel.send(random.choice(nans))
+
+        if "美少女" in content:
+            await message.channel.send("呼ばれた気がした")
+        
+        words = content.split()
         head = words[0]
         if head == "!meigen":
             if len(words) == 1:
@@ -92,7 +101,7 @@ class MessageReceiver:
             if len(self.meigen_list) >= 10:
                 self.meigen_list = self.meigen_list[1:]
 
-            meigen = "```\n"+message.content[len(words[1])+8:].replace('`', '\'')+"\n　−−− "+words[1].replace('`', '\'')+"\n```"
+            meigen = "```\n"+content[len(words[1])+8:].replace('`', '\'')+"\n　−−− "+words[1].replace('`', '\'')+"\n```"
             self.meigen_list.append(meigen)
 
             await message.channel.send(meigen)
