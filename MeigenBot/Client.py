@@ -31,6 +31,7 @@ class Client(discord.Client):
             self.message_receiver.meigen_list.insert(0, message.content)
         
         self.hour_loop.start()
+        send_channel.send("おっぱい！（再起動）")
 
     async def on_message(self, message):
         await self.message_receiver.receive(message)
