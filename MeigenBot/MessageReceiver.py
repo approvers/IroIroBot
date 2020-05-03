@@ -24,15 +24,25 @@ class MessageReceiver:
         content = message.content
 
 
+        res = random.choice(["ちんちん", "侍", "おちんちん", "ちんちん侍"])
+        tin_flag = False
+        
         if content == "ちんちん":
-            res = ["ちんちん", "侍", "おちんちん", "ちんちん侍"]
-            await message.channel.send(random.choice(res))
+            tin_flag = True
         if content == "侍":
+            tin_flag = True
             await message.channel.send("シャキーン！")
         if content == "おちんちん":
+            tin_flag = True
             await message.channel.send("びろーん")
         if content == "ちんちん侍":
+            tin_flag = True
             await message.channel.send("ちんちん侍！")
+            
+        if tin_flag:
+            await message.channel.send(res)
+            if res == "ちんちん侍":
+                await message.channel.send("ちんちん侍！")
 
 
         if wordsInContent(["なん", "何", "ナン", "NaN"], content):
