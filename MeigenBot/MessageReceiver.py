@@ -3,6 +3,13 @@ import random
 
 
 
+def wordsInContent(words:list, content:str) -> bool:
+    for word in words:
+        if word in content:
+            return True
+    return False
+
+
 class MessageReceiver:
     def __init__(self, send_channel, voice_channel, dm_channel):
         self.send_channel = send_channel
@@ -16,12 +23,30 @@ class MessageReceiver:
 
         content = message.content
 
-        if "なん" in content or "何" in content or "ナン" in content:
+
+        if content == "ちんちん":
+            res = ["ちんちん", "侍", "おちんちん", "ちんちん侍"]
+            await message.channel.send(random.choice(res))
+        if content == "侍":
+            await message.channel.send("シャキーン！")
+        if content == "おちんちん":
+            await message.channel.send("びろーん")
+        if content == "ちんちん侍":
+            await message.channel.send("ちんちん侍！")
+
+
+        if wordsInContent(["なん", "何", "ナン", "NaN"], content):
             nans = ["ナン！", "ナンですね", "ナンじゃん", "ナン！？","ん？今ナンって言ったよね？", "NaN"]
             await message.channel.send(random.choice(nans))
 
-        if "美少女" in content:
+        if wordsInContent(["else", "クソコード", "ハードコーディング", "マジックナンバー"], content):
+            await message.channel.send("ん？")
+
+        if wordsInContent(["美少女", "天才"], content):
             await message.channel.send("呼ばれた気がした")
+            
+        if "おっぱい" in content:
+            await message.channel.send("おっぱい！")
             
         if content == "おやすみ":
             await message.channel.send("おやすみなさい")
@@ -29,7 +54,7 @@ class MessageReceiver:
                     return
 
             content = random.choice(self.meigen_list)
-            await message.channel.send(content)
+            await message.channel.send("[今日のハイライト]\n"+content)
             return
         
         words = content.split()
