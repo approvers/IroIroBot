@@ -30,7 +30,7 @@ class Client(discord.Client):
                 continue
             self.message_receiver.meigen_list.insert(0, message.content)
         
-        await send_channel.send("おっぱい！（再起動）")
+        await self.get_channel(693492939371970640).send("おっぱい！（再起動）")
         self.hour_loop.start()
 
     async def on_message(self, message):
