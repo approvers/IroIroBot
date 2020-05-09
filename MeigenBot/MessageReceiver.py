@@ -78,6 +78,7 @@ class MessageReceiver:
                     " †使い方† \n"
                     "    !meigen [発言者] [名言]    : 名言追加\n"
                     "    !meigen print [名言数=5]   : 名言列挙\n"
+                    "    !meigen del [添字]        : 名言削除\n"
                     "    !meigen random             : ランダムで名言表示\n"
                     "```"
                 )
@@ -106,23 +107,65 @@ class MessageReceiver:
 
                     meigen_lim = int(words[2])
                     #入力された整数が制約を満たしているか
-                    if not (0 < meigen_lim <= 10):
+                    if not (0 < meigen_lim <= 15):
                         await message.channel.send(
                             "```"
                             " †キレた† \n"
-                            "   1~10以内にしろよカス\n"
+                            "   1~15以内にしろよカス\n"
                             "```"
                         )
                         return
 
                 text = ""
-                for i in range(len(self.meigen_list)):
+                list_len = len(self.meigen_list)
+                for i in range(list_len):
                     if i >= meigen_lim:
                         break
-                    text = self.meigen_list[-(i+1)] + text
+                    text = "\n[{}]\n".format(list_len-i) + self.meigen_list[-(i+1)] + text
                 
                 await message.channel.send(text)
                 return
+
+            if command == "del":
+                if len(words) != 3:
+                    return
+
+                #キャスト可能か
+                try:
+                    int(words[2])
+                except:
+                    await message.channel.send(
+                        "```"
+                        " †キレた† \n"
+                        "   整数指定しろよカス\n"
+                        "```"
+                    )
+                    return
+                meigen_index = int(words[2])
+                #入力された整数が制約を満たしているか
+                if not (0 < meigen_index <= 15):
+                    await message.channel.send(
+                        "```"
+                        " †キレた† \n"
+                        "   1~15以内にしろよカス\n"
+                        "```"
+                    )
+                    return
+                #要素があるか
+                if meigen_index > len(self.meigen_list):
+                    await message.channel.send(
+                        "```"
+                        " †キレた† \n"
+                        "   要素がないよカス\n"
+                        "```"
+                    )
+                    return
+
+                text = "[削除しました]\n" + self.meigen_list.pop(meigen_index-1)
+                await message.channel.send(text)
+                return
+
+
 
             if command == "random":
                 if len(self.meigen_list) < 1:
@@ -142,13 +185,14 @@ class MessageReceiver:
                 )
                 return
             
-            if len(self.meigen_list) >= 10:
+            if len(self.meigen_list) >= 15:
                 self.meigen_list = self.meigen_list[1:]
 
-            meigen = "```\n"+content[len(words[1])+8:].replace('`', '\'')+"\n　−−− "+words[1].replace('`', '\'')+"\n```"
+            meigen = "```\n"+content[len(words[1])+9:].replace('`', '\'')+"\n　−−− "+words[1].replace('`', '\'')+"\n```"
             self.meigen_list.append(meigen)
+            index = "[{}]\n".format(len(self.meigen_list))
 
-            await message.channel.send(meigen)
+            await message.channel.send(index + meigen)
             await self.dm_channel.send(meigen)
             
     async def random_event(self):
