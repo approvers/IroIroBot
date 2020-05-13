@@ -58,17 +58,28 @@ class MessageReceiver:
         if "おっぱい" in content:
             await message.channel.send("おっぱい！")
             
-        if content == "おやすみ":
+        if "おやすみ" in content:
             await message.channel.send("おやすみなさい")
             if len(self.meigen_list) < 1:
                     return
 
             content = random.choice(self.meigen_list)
-            await message.channel.send("[今日のハイライト]\n"+content)
+            await message.channel.send("[ハイライト]\n"+content)
             return
-        
+
         words = content.split()
         head = words[0]
+
+        if head == "!haiku":
+            if len(words) < 2:
+                return
+
+            w = words[1] + " "
+            ans = w+w+w+w+w+"\n"+w+w+w+w+w+w+w+"\n"+w+w+w+w+w
+            await message.channel.send(ans)
+            return
+
+
         if head == "!meigen":
             if len(words) == 1:
                 await message.channel.send(
@@ -76,10 +87,11 @@ class MessageReceiver:
                     " †軽く説明† \n"
                     "   みんなの名言（迷言）を表示してくれる神Botだよ\n"
                     " †使い方† \n"
-                    "    !meigen [発言者] [名言]    : 名言追加\n"
-                    "    !meigen print [名言数=5]   : 名言列挙\n"
-                    "    !meigen del [添字]        : 名言削除\n"
-                    "    !meigen random             : ランダムで名言表示\n"
+                    "    !meigen [発言者] [名言]    :   名言追加\n"
+                    "    !meigen print [名言数=5]   :   名言列挙\n"
+                    "    !meigen del [添字]         :   名言削除\n"
+                    "    !meigen random             :   ランダムで名言表示\n"
+                    "    !haiku [任意の文字列]       :   575で表示\n"
                     "```"
                 )
                 return
