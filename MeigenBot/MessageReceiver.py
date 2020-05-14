@@ -80,6 +80,22 @@ class MessageReceiver:
             return
 
 
+        if head == "!t":
+            if len(words) < 2:
+                return
+
+            await message.channel.send("{}界のtourist".format(words[1]))
+            return
+
+
+        if head == "!h":
+            if len(words) < 2:
+                return
+
+            await message.channel.send("{}界の灰コーダー".format(words[1]))
+            return
+
+
         if head == "!meigen":
             if len(words) == 1:
                 await message.channel.send(
