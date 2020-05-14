@@ -74,6 +74,15 @@ class MessageReceiver:
             if len(words) < 2:
                 return
 
+            if len(message.content) > 100:
+                await message.channel.send(
+                    "```"
+                    " †キレた† \n"
+                    "   100文字以内にしろよカス\n"
+                    "```"
+                )
+                return
+
             w = words[1] + " "
             ans = w+w+w+w+w+"\n"+w+w+w+w+w+w+w+"\n"+w+w+w+w+w
             await message.channel.send(ans)
@@ -84,12 +93,30 @@ class MessageReceiver:
             if len(words) < 2:
                 return
 
+            if len(message.content) > 100:
+                await message.channel.send(
+                    "```"
+                    " †キレた† \n"
+                    "   100文字以内にしろよカス\n"
+                    "```"
+                )
+                return
+
             await message.channel.send("{}界のtourist".format(words[1]))
             return
 
 
         if head == "!h":
             if len(words) < 2:
+                return
+
+            if len(message.content) > 100:
+                await message.channel.send(
+                    "```"
+                    " †キレた† \n"
+                    "   100文字以内にしろよカス\n"
+                    "```"
+                )
                 return
 
             await message.channel.send("{}界の灰コーダー".format(words[1]))
@@ -107,7 +134,9 @@ class MessageReceiver:
                     "    !meigen print [名言数=5]   :   名言列挙\n"
                     "    !meigen del [添字]         :   名言削除\n"
                     "    !meigen random             :   ランダムで名言表示\n"
-                    "    !haiku [任意の文字列]       :   575で表示\n"
+                    "    !haiku [任意の文字列]      :   575で表示\n"
+                    "    !t [任意の文字列]          :   touristで表示\n"
+                    "    !h [任意の文字列]          :   灰コーダーで表示\n"
                     "```"
                 )
                 return
