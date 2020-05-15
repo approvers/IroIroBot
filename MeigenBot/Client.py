@@ -30,6 +30,10 @@ class Client(discord.Client):
                 self.message_receiver.fmt_list.insert(0, message.content[2:])
                 continue
 
+            if message.content.split()[0] == "K":
+                self.message_receiver.key_list.insert(0, message.content[2:])
+                continue
+
             if len(self.message_receiver.meigen_list) >= 15:
                 continue
 

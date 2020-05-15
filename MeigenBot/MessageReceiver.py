@@ -17,6 +17,7 @@ class MessageReceiver:
         self.dm_channel = dm_channel
         self.meigen_list = []
         self.fmt_list = []
+        self.key_list = []
 
     async def receive(self, message:discord.Message):
         if message.author.bot:
@@ -134,29 +135,81 @@ class MessageReceiver:
             await self.dm_channel.send("F "+self.fmt_list[-1])
             return
 
+        
+        if head == "!key":
+            if len(words) < 3:
+                return
+
+            if words[1] == "print":
+                for key in self.key_list:
+                    key_name = key.split()[0]
+                    if key_name != words[2]:
+                        continue
+
+                    await message.channel.send(key[len(key_name)+1:])
+                return
+
+            if words[1] == "del":
+                if len(words) < 4:
+                    return
+
+                k_s = content[len("!key del "):]
+                for ind in range(len(self.key_list)):
+                    key = self.key_list[ind]
+                    if k_s != key:
+                        continue
+
+                    del self.key_list[ind]
+                    async for message_h in self.dm_channel.history(limit=200):
+                        if message_h.content.split()[0] != "K":
+                            continue
+                        
+                        if k_s != message_h.content[2:]:
+                            continue
+
+                        await message_h.delete()
+                        break
+
+                    await message.channel.send("***†削除完了†***")
+                    return
+                return
+
+            self.key_list.append(content[len(words[0])+1:])
+            await message.channel.send("***†登録完了†***")
+            await self.dm_channel.send("K "+self.key_list[-1])
+            return
+
 
         if head == "!meigen":
             if len(words) == 1:
                 await message.channel.send(
-                    "``` \n"
-                    " †軽く説明† \n"
-                    "   みんなの名言（迷言）を表示してくれる神Botだよ \n"
-                    " †使い方† \n"
-                    "    !meigen [発言者] [名言] \n"
+                    "```\n"
+                    "†meigen : みんなの名言（迷言）を管理† \n"
+                    "   !meigen [発言者] [名言] \n"
                     "       名言追加 \n"
-                    "    !meigen print [名言数=5] \n"
+                    "   !meigen print [名言数=5] \n"
                     "       名言列挙 \n"
-                    "    !meigen del [添字] \n"
+                    "   !meigen del [添字] \n"
                     "       名言削除 \n"
-                    "    !meigen random\n"
+                    "   !meigen random\n"
                     "       ランダムで名言表示 \n"
-                    "    !format [名前] [形式] \n"
+                    "\n"
+                    "†format : フォーマットを使って送信† \n"
+                    "   !format [名前] [形式] \n"
                     "       フォーマット追加 \n"
-                    "    !format print [名前] \n"
+                    "   !format print [名前] \n"
                     "       フォーマット表示 \n"
-                    "    !format del [名前] [形式] \n"
-                    "       フォーマット消去 \n"
-                    "``` \n"
+                    "   !format del [名前] [形式] \n"
+                    "       フォーマット削除 \n"
+                    "\n"
+                    "†key : 単語に反応して送信† \n"
+                    "   !key [キー] [内容] \n"
+                    "       キーが含まれるメッセージに内容で反応 \n"
+                    "   !key print [キー] \n"
+                    "       key表示 \n"
+                    "   !key del [キー] [内容] \n"
+                    "       key削除 \n"
+                    "```"
                 )
                 return
 
@@ -279,13 +332,21 @@ class MessageReceiver:
 
         for fmt in self.fmt_list:
             f_name = fmt.split()[0]
-            if (head != f_name):
+            if head != f_name:
                 continue
 
             f_s = fmt[len(f_name)+1:]
             if f_s.count("{}") != len(words)-1:
                 continue
             await message.channel.send(f_s.format(*words[1:]))
+
+        for key in self.key_list:
+            key_name = key.split()[0]
+            if not (key_name in content):
+                continue
+
+            k_s = key[len(key_name)+1:]
+            await message.channel.send(k_s)
 
     
             
