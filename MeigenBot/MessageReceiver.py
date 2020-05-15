@@ -72,6 +72,25 @@ class MessageReceiver:
         head = words[0]
 
 
+        if head == "!haiku":
+            if len(words) < 2:
+                return
+
+            if len(message.content) > 100:
+                await message.channel.send(
+                    "```"
+                    " †キレた† \n"
+                    "   100文字以内にしろよカス\n"
+                    "```"
+                )
+                return
+
+            w = words[1] + " "
+            ans = w+w+w+w+w+"\n"+w+w+w+w+w+w+w+"\n"+w+w+w+w+w
+            await message.channel.send(ans)
+            return
+
+
         if head == "!format":
             if len(words) < 3:
                 return
