@@ -218,7 +218,14 @@ class MessageReceiver:
                     )
                     return
 
-                text = "[削除しました]\n" + self.meigen_list.pop(meigen_index-1)
+                m = self.meigen_list.pop(meigen_index-1)
+                async for message_h in self.dm_channel.history(limit=200):
+                    if m != message_h.content:
+                        continue
+
+                    await message_h.delete()
+                    break
+                text = "[削除しました]\n" + m
                 await message.channel.send(text)
                 return
 
