@@ -11,11 +11,13 @@ def wordsInContent(words:list, content:str) -> bool:
 
 
 class MessageReceiver:
-    def __init__(self, send_channel, voice_channel, dm_channel):
+    def __init__(self, send_channel, voice_channel, dm_channel, fmt_channel):
         self.send_channel = send_channel
         self.voice_channel = voice_channel
         self.dm_channel = dm_channel
+        self.fmt_channel = fmt_channel
         self.meigen_list = []
+        self.fmt_list = []
 
     async def receive(self, message:discord.Message):
         if message.author.bot:
@@ -70,56 +72,19 @@ class MessageReceiver:
         words = content.split()
         head = words[0]
 
-        if head == "!haiku":
-            if len(words) < 2:
-                return
 
-            if len(message.content) > 100:
+        if head == "!format":
+            if len(words) < 3:
                 await message.channel.send(
                     "```"
                     " †キレた† \n"
-                    "   100文字以内にしろよカス\n"
+                    "   引数少ないよカス\n"
                     "```"
                 )
                 return
 
-            w = words[1] + " "
-            ans = w+w+w+w+w+"\n"+w+w+w+w+w+w+w+"\n"+w+w+w+w+w
-            await message.channel.send(ans)
-            return
-
-
-        if head == "!t":
-            if len(words) < 2:
-                return
-
-            if len(message.content) > 100:
-                await message.channel.send(
-                    "```"
-                    " †キレた† \n"
-                    "   100文字以内にしろよカス\n"
-                    "```"
-                )
-                return
-
-            await message.channel.send("{}界のtourist".format(words[1]))
-            return
-
-
-        if head == "!h":
-            if len(words) < 2:
-                return
-
-            if len(message.content) > 100:
-                await message.channel.send(
-                    "```"
-                    " †キレた† \n"
-                    "   100文字以内にしろよカス\n"
-                    "```"
-                )
-                return
-
-            await message.channel.send("{}界の灰コーダー".format(words[1]))
+            self.fmt_list.append(content[len(words[0])+1:])
+            await message.channel.send("***†登録完了†***")
             return
 
 
@@ -223,7 +188,6 @@ class MessageReceiver:
                 return
 
 
-
             if command == "random":
                 if len(self.meigen_list) < 1:
                     return
@@ -251,6 +215,18 @@ class MessageReceiver:
 
             await message.channel.send(index + meigen)
             await self.dm_channel.send(meigen)
+
+        for fmt in self.fmt_list:
+            f_name = fmt.split()[0]
+            if (head != f_name):
+                continue
+
+            f_s = fmt[len(f_name)+1:]
+            if f_s.count("{}") != len(words)-1:
+                continue
+            await message.channel.send(f_s.format(*words[1:]))
+
+    
             
     async def random_event(self):
         if len(self.voice_channel.members) == 0:
