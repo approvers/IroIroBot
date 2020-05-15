@@ -11,11 +11,10 @@ def wordsInContent(words:list, content:str) -> bool:
 
 
 class MessageReceiver:
-    def __init__(self, send_channel, voice_channel, dm_channel, fmt_channel):
+    def __init__(self, send_channel, voice_channel, dm_channel):
         self.send_channel = send_channel
         self.voice_channel = voice_channel
         self.dm_channel = dm_channel
-        self.fmt_channel = fmt_channel
         self.meigen_list = []
         self.fmt_list = []
 
@@ -75,34 +74,70 @@ class MessageReceiver:
 
         if head == "!format":
             if len(words) < 3:
-                await message.channel.send(
-                    "```"
-                    " †キレた† \n"
-                    "   引数少ないよカス\n"
-                    "```"
-                )
+                return
+
+            if words[1] == "print":
+                for fmt in self.fmt_list:
+                    f_name = fmt.split()[0]
+                    if f_name != words[2]:
+                        continue
+
+                    await message.channel.send(fmt[len(f_name)+1:])
+                return
+
+            if words[1] == "del":
+                if len(words) < 4:
+                    return
+
+                f_s = content[len("!format del "):]
+                for ind in range(len(self.fmt_list)):
+                    fmt = self.fmt_list[ind]
+                    if f_s != fmt:
+                        continue
+
+                    del self.fmt_list[ind]
+                    async for message_h in self.dm_channel.history(limit=200):
+                        if message_h.content.split()[0] != "F":
+                            continue
+                        
+                        if f_s != message_h.content[2:]:
+                            continue
+
+                        await message_h.delete()
+                        break
+
+                    await message.channel.send("***†削除完了†***")
+                    return
                 return
 
             self.fmt_list.append(content[len(words[0])+1:])
             await message.channel.send("***†登録完了†***")
+            await self.dm_channel.send("F "+self.fmt_list[-1])
             return
 
 
         if head == "!meigen":
             if len(words) == 1:
                 await message.channel.send(
-                    "```"
+                    "``` \n"
                     " †軽く説明† \n"
-                    "   みんなの名言（迷言）を表示してくれる神Botだよ\n"
+                    "   みんなの名言（迷言）を表示してくれる神Botだよ \n"
                     " †使い方† \n"
-                    "    !meigen [発言者] [名言]    :   名言追加\n"
-                    "    !meigen print [名言数=5]   :   名言列挙\n"
-                    "    !meigen del [添字]         :   名言削除\n"
-                    "    !meigen random             :   ランダムで名言表示\n"
-                    "    !haiku [任意の文字列]      :   575で表示\n"
-                    "    !t [任意の文字列]          :   touristで表示\n"
-                    "    !h [任意の文字列]          :   灰コーダーで表示\n"
-                    "```"
+                    "    !meigen [発言者] [名言] \n"
+                    "       名言追加 \n"
+                    "    !meigen print [名言数=5] \n"
+                    "       名言列挙 \n"
+                    "    !meigen del [添字] \n"
+                    "       名言削除 \n"
+                    "    !meigen random\n"
+                    "       ランダムで名言表示 \n"
+                    "    !format [名前] [形式] \n"
+                    "       フォーマット追加 \n"
+                    "    !format print [名前] \n"
+                    "       フォーマット表示 \n"
+                    "    !format del [名前] [形式] \n"
+                    "       フォーマット消去 \n"
+                    "``` \n"
                 )
                 return
 
