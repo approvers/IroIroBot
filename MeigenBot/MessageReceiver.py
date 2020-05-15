@@ -204,11 +204,11 @@ class MessageReceiver:
                     "\n"
                     "†key : 単語に反応して送信† \n"
                     "   !key [キー] [内容] \n"
-                    "       キーが含まれるメッセージに内容で反応 \n"
+                    "       キー追加 \n"
                     "   !key print [キー] \n"
-                    "       key表示 \n"
+                    "       キー表示 \n"
                     "   !key del [キー] [内容] \n"
-                    "       key削除 \n"
+                    "       キー削除 \n"
                     "```"
                 )
                 return
