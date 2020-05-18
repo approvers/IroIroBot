@@ -1,3 +1,3 @@
-from MeigenBot.Client import Client
+from IroIroBot.Client import Client
 
 Client().run()
