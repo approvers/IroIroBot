@@ -16,9 +16,7 @@ class ChannelHolder:
         Arguments:
             get_channel_function {function} -- Client.get_channel
         """
-        print(get_channel_function)
         for channel_name, channel_id in ChannelHolder.CHANNEL_ID_DICT.items():
-            print(get_channel_function(channel_id))
             ChannelHolder.channel_dict[channel_name] = get_channel_function(channel_id)
 
     @staticmethod
@@ -31,5 +29,4 @@ class ChannelHolder:
         Returns:
             discord.TextChannel -- 対応するチャンネル
         """
-        print(ChannelHolder.channel_dict)
         return ChannelHolder.channel_dict[channel_name]
