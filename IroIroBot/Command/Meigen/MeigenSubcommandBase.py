@@ -2,11 +2,9 @@ import discord
 from abc import ABCMeta, abstractmethod
 
 
-
-class CommandBase(metaclass=ABCMeta):
+class MeigenSubcommandBase(metaclass=ABCMeta):
     COMMAND = None
     HELP = None
-    # WARNING {prefix}を必ず用意する
 
 
     def __new__(cls, *_, **__):
@@ -18,9 +16,5 @@ class CommandBase(metaclass=ABCMeta):
         return self
         
     @abstractmethod
-    async def run(self, message: discord.Message):
-        pass
-
-    @abstractmethod
-    async def send_help(self, channel: discord.TextChannel, prefix: str):
+    async def run(self, args: str):
         pass
