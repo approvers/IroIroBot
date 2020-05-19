@@ -2,7 +2,9 @@ import discord
 
 from IroIroBot.Command.CommandParameters import CommandParameters
 from IroIroBot.Command.CommandBase import CommandBase
+from IroIroBot.Command.Meigen.MeigenAddCommand import MeigenAddCommand
 from IroIroBot.Command.Meigen.PrintSubcommand import PrintSubcommand
+from IroIroBot.Command.Meigen.MeigenHolder import MeigenHolder
 
 
 
@@ -28,6 +30,8 @@ class MeigenCommand(CommandBase):
                 params.new_param(new_args)
             )
             return
-    
+
+        await MeigenAddCommand(params.message.channel, params.args).run()
+        
     async def send_help(self, channel: discord.TextChannel, prefix: str):
         pass

@@ -4,44 +4,58 @@ from IroIroBot.Singleton import Singleton
 
 class MeigenHolder(Singleton):
     LEN_LIMIT = 50
-    HOLD_LIMIT = 30
-    ID_OPTION = "id"
+    HOLD_LIMIT = 10
     FORMAT = \
-        "```\
-        {text}\n\
-            --- {name}\
-        ```"
+        "```\n" +\
+        "{text}\n" +\
+        "    --- {name}\n" +\
+        "```"
 
 
     def __init__(self):
-        self.meigen_list = []
+        if not hasattr(self, "meigen_list"):
+            self.meigen_list = []
 
     def prepend(self, meigen: str):
         self.meigen_list.insert(0, meigen)
 
-    def append(self, name: str, text: str):
-        self.meigen_list.append(
-            MeigenHolder.FORMAT.format(
-                name=name, text=text
-            )
+    def append(self, name: str, text: str) -> str:
+        if len(name) + len(text) > MeigenHolder.LEN_LIMIT:
+            return \
+                "```\n" +\
+                "†キレた†\n" +\
+                f"   名前と内容の合計は{MeigenHolder.LEN_LIMIT}以下にしろカス\n" +\
+                "```"
+
+        meigen = MeigenHolder.FORMAT.format(
+            name=name, text=text
         )
+        self.meigen_list.append(meigen)
+        if len(self.meigen_list) > MeigenHolder.HOLD_LIMIT:
+            self.meigen_list = self.meigen_list[1:]
+
+        return  f"[{len(self.meigen_list)}]\n" +\
+                f"{meigen}\n"
 
     def print(self, number: int) -> str:
-        if 0 >= number > MeigenHolder.HOLD_LIMIT:
+        if number <= 0 or MeigenHolder.HOLD_LIMIT < number:
             return \
-                "```\
-                †キレた†\n\
-                1~{MeigenHolder.HOLD_LIMIT}以内にしろよカス\n\
-                ```"
-
+                "```\n" +\
+                "†キレた†\n" +\
+                f"   1~{MeigenHolder.HOLD_LIMIT}以内にしろよカス\n" +\
+                "```"
+        
         text = ""
+        if number > len(self.meigen_list):
+            number = len(self.meigen_list)
+
         for i in range(number):
-            meigen_number  = len(self.meigen_list) - i
-            if meigen_number == 0:
+            index = len(self.meigen_list) + i - number
+            if index < 0:
                 break
 
-            text += f"[{meigen_number}]\n\
-                {self.meigen_list[meigen_number-1]}\n"
+            text += f"[{index+1}]\n" +\
+                    f"{self.meigen_list[index]}\n"
 
         return text
 

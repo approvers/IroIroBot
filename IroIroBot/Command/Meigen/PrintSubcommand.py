@@ -23,13 +23,12 @@ class PrintSubcommand(MeigenSubcommandBase):
                 MeigenHolder().print(PrintSubcommand.DEFAULT_NUM)
             )
             return
-        print(words)
 
         if not words[0].isdecimal():
             await params.send(
                 "```\n" +\
                 "†キレた†\n" +\
-                "まともな数字入力しろよカス\n" +\
+                "   まともな数字入力しろよカス\n" +\
                 "```"
             )
             return
