@@ -14,5 +14,8 @@ class MessageRoot:
         if message.author.bot:
             return
 
+        if message.content.startswith(self.command_receiver.PREFIX):
+            await self.command_receiver.receive(message)
+            return
 
         await self.message_receiver.receive(message)

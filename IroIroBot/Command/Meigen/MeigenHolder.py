@@ -1,4 +1,8 @@
-class MeigenHolder:
+from IroIroBot.Singleton import Singleton
+
+
+
+class MeigenHolder(Singleton):
     LEN_LIMIT = 50
     HOLD_LIMIT = 30
     ID_OPTION = "id"
@@ -8,14 +12,15 @@ class MeigenHolder:
             --- {name}\
         ```"
 
-    meigen_list = []
 
+    def __init__(self):
+        self.meigen_list = []
 
     def prepend(self, meigen: str):
-        MeigenHolder.meigen_list.insert(0, meigen)
+        self.meigen_list.insert(0, meigen)
 
     def append(self, name: str, text: str):
-        MeigenHolder.meigen_list.append(
+        self.meigen_list.append(
             MeigenHolder.FORMAT.format(
                 name=name, text=text
             )
@@ -31,11 +36,14 @@ class MeigenHolder:
 
         text = ""
         for i in range(number):
-            meigen_number  = len(MeigenHolder.meigen_list) - i
+            meigen_number  = len(self.meigen_list) - i
             if meigen_number == 0:
                 break
 
             text += f"[{meigen_number}]\n\
-                {MeigenHolder.meigen_list[meigen_number-1]}\n"
+                {self.meigen_list[meigen_number-1]}\n"
 
         return text
+
+    def delete(self, index: int) -> str:
+        pass

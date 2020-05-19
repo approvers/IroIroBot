@@ -1,6 +1,8 @@
 import discord
 from abc import ABCMeta, abstractmethod
 
+from IroIroBot.Command.CommandParameters import CommandParameters
+
 
 
 class CommandBase(metaclass=ABCMeta):
@@ -18,7 +20,7 @@ class CommandBase(metaclass=ABCMeta):
         return self
         
     @abstractmethod
-    async def run(self, message: discord.Message):
+    async def run(self, params: CommandParameters):
         pass
 
     @abstractmethod

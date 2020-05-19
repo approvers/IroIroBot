@@ -1,5 +1,6 @@
 import discord
 
+from IroIroBot.Command.CommandParameters import CommandParameters
 from IroIroBot.Command.CommandBase import CommandBase
 from IroIroBot.Command.Meigen.PrintSubcommand import PrintSubcommand
 
@@ -12,8 +13,21 @@ class MeigenCommand(CommandBase):
         ***†MEIGEN†***を管理するよ"
 
 
-    async def run(self, message: discord.Message):
-        pass
+    def __init__(self):
+        self.subcommands = [PrintSubcommand()]
+
+    async def run(self, params: CommandParameters):
+        HEAD = params.args.split()[0]
+
+        for subcommand in self.subcommands:
+            if HEAD != subcommand.COMMAND:
+                continue
+
+            new_args = params.args[len(HEAD):].lstrip()
+            await subcommand.run(
+                params.new_param(new_args)
+            )
+            return
     
     async def send_help(self, channel: discord.TextChannel, prefix: str):
         pass

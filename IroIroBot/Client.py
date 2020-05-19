@@ -20,12 +20,12 @@ class Client(discord.Client):
         super().run(Client.__TOKEN)
 
     async def on_ready(self):
-        ChannelHolder.fetch_channel(self.get_channel)
+        ChannelHolder().fetch_channel(self.get_channel)
 
         self.hour_loop.start()
 
     async def on_message(self, message: discord.Message):
-        self.message_root.receive(message)
+        await self.message_root.receive(message)
 
     @tasks.loop(minutes=60)
     async def hour_loop(self):
