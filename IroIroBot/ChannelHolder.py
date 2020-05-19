@@ -10,7 +10,7 @@ class ChannelHolder(Singleton):
     }
 
 
-    def __init__(self):
+    def _set_up(self):
         self.channel_dict = {}
         
     def fetch_channel(self, get_channel_function):

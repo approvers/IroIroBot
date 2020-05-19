@@ -1,4 +1,5 @@
 from IroIroBot.Singleton import Singleton
+from IroIroBot.ChannelHolder import ChannelHolder
 
 
 
@@ -11,10 +12,9 @@ class MeigenHolder(Singleton):
         "    --- {name}\n" +\
         "```"
 
-
-    def __init__(self):
-        if not hasattr(self, "meigen_list"):
-            self.meigen_list = []
+    
+    def _set_up(self):
+        self.meigen_list = []
 
     def prepend(self, meigen: str):
         self.meigen_list.insert(0, meigen)
