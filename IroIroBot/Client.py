@@ -3,6 +3,7 @@ from discord.ext import tasks
 import os
 
 from IroIroBot.ChannelHolder import ChannelHolder
+from IroIroBot.Command.Meigen.MeigenHolder import MeigenHolder
 from IroIroBot.MessageRoot import MessageRoot
 
 
@@ -20,7 +21,13 @@ class Client(discord.Client):
         super().run(Client.__TOKEN)
 
     async def on_ready(self):
-        ChannelHolder().fetch_channel(self.get_channel)
+        channel_holder = ChannelHolder()
+        meigen_holder = MeigenHolder()
+        channel_holder.fetch_channel(self.get_channel)
+
+        #TODO ここをクラス化
+        async for message in channel_holder.get_channel("meigen").history(limit=MeigenHolder.HOLD_LIMIT):
+            meigen_holder.prepend(message.content)
 
         self.hour_loop.start()
 

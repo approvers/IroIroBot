@@ -66,13 +66,13 @@ class MeigenAddCommand:
             name = meigen_message.author.name
             text = meigen_message.content
             await self.send(
-                MeigenHolder().append(name, text)
+                await MeigenHolder().append(name, text)
             )
             return
 
         name = self.words[0]
         text = self.args[len(name):].lstrip()
         await self.send(
-            MeigenHolder().append(name, text)
+            await MeigenHolder().append(name, text)
         )
         return

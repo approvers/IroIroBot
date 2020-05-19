@@ -5,7 +5,7 @@ from IroIroBot.ChannelHolder import ChannelHolder
 
 class MeigenHolder(Singleton):
     LEN_LIMIT = 50
-    HOLD_LIMIT = 10
+    HOLD_LIMIT = 30
     FORMAT = \
         "```\n" +\
         "{text}\n" +\
@@ -19,7 +19,7 @@ class MeigenHolder(Singleton):
     def prepend(self, meigen: str):
         self.meigen_list.insert(0, meigen)
 
-    def append(self, name: str, text: str) -> str:
+    async def append(self, name: str, text: str) -> str:
         if len(name) + len(text) > MeigenHolder.LEN_LIMIT:
             return \
                 "```\n" +\
@@ -34,6 +34,7 @@ class MeigenHolder(Singleton):
         if len(self.meigen_list) > MeigenHolder.HOLD_LIMIT:
             self.meigen_list = self.meigen_list[1:]
 
+        await ChannelHolder().get_channel("meigen").send(meigen)
         return  f"[{len(self.meigen_list)}]\n" +\
                 f"{meigen}\n"
 
@@ -59,5 +60,5 @@ class MeigenHolder(Singleton):
 
         return text
 
-    def delete(self, index: int) -> str:
+    async def delete(self, index: int) -> str:
         pass
