@@ -23,6 +23,7 @@ class Client(discord.Client):
     async def on_ready(self):
         channel_holder = ChannelHolder()
         meigen_holder = MeigenHolder()
+        meigen_holder._set_up()
         channel_holder.fetch_channel(self.get_channel)
 
         #TODO ここをクラス化
