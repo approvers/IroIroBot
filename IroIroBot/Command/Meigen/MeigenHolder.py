@@ -12,7 +12,7 @@ class MeigenHolder(Singleton):
         "    --- {name}\n" +\
         "```"
 
-    
+
     def _set_up(self):
         self.meigen_list = []
 
@@ -61,4 +61,30 @@ class MeigenHolder(Singleton):
         return text
 
     async def delete(self, index: int) -> str:
-        pass
+        if index <= 0 or MeigenHolder.HOLD_LIMIT < index:
+            return \
+                "```\n" +\
+                "†キレた†\n" +\
+                f"   1~{MeigenHolder.HOLD_LIMIT}以内にしろよカス\n" +\
+                "```"
+
+        if index > len(self.meigen_list):
+            return \
+                "```\n" +\
+                "†キレた†\n" +\
+                f"   その添字は正しくないよカス\n" +\
+                "```"
+        
+        meigen_channel = ChannelHolder().get_channel("meigen")
+        del_message_index = len(self.meigen_list) - index
+        count = 0
+        async for history_message in meigen_channel.history():
+            if count != del_message_index:
+                count += 1
+                continue
+
+            await history_message.delete()
+            break
+
+        del_meigen = self.meigen_list.pop(index-1)
+        return "[削除しました]\n" + del_meigen

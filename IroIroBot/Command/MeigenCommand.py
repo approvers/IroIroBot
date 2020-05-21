@@ -4,6 +4,7 @@ from IroIroBot.Command.CommandParameters import CommandParameters
 from IroIroBot.Command.CommandBase import CommandBase
 from IroIroBot.Command.Meigen.MeigenAddCommand import MeigenAddCommand
 from IroIroBot.Command.Meigen.PrintSubcommand import PrintSubcommand
+from IroIroBot.Command.Meigen.DelSubcommand import DelSubcommand
 from IroIroBot.Command.Meigen.MeigenHolder import MeigenHolder
 
 
@@ -16,7 +17,7 @@ class MeigenCommand(CommandBase):
 
 
     def __init__(self):
-        self.subcommands = [PrintSubcommand()]
+        self.subcommands = [PrintSubcommand(), DelSubcommand()]
 
     async def run(self, params: CommandParameters):
         HEAD = params.args.split()[0]
