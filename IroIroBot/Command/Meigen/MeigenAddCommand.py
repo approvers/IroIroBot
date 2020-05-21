@@ -41,8 +41,15 @@ class MeigenAddCommand:
             "```"
         )
         return
-        
 
+    async def replace_and_send(self, name: str, text: str):
+        new_name = name.replace('`', '\'')
+        new_text = text.replace('`', '\'')
+
+        await self.send(
+            await MeigenHolder().append(new_name, new_text)
+        )
+        
     async def run(self):
         if len(self.words) < 2:
             return
@@ -65,14 +72,14 @@ class MeigenAddCommand:
 
             name = meigen_message.author.name
             text = meigen_message.content
-            await self.send(
-                await MeigenHolder().append(name, text)
+            await self.replace_and_send(
+                name, text
             )
             return
 
         name = self.words[0]
         text = self.args[len(name):].lstrip()
-        await self.send(
-            await MeigenHolder().append(name, text)
+        await self.replace_and_send(
+            name, text
         )
         return
