@@ -1,3 +1,5 @@
+import random
+
 from IroIroBot.Singleton import Singleton
 from IroIroBot.ChannelHolder import ChannelHolder
 
@@ -88,3 +90,20 @@ class MeigenHolder(Singleton):
 
         del_meigen = self.meigen_list.pop(index-1)
         return "[削除しました]\n" + del_meigen
+
+    def random(self, number: int) -> str:
+        index_list = [i for i in range(1, len(self.meigen_list)+1)]
+        random.shuffle(index_list)
+
+        if number <= 0 or len(self.meigen_list) < number:
+            return \
+                "```\n" +\
+                "†キレた†\n" +\
+                f"   1~{len(self.meigen_list)}以内にしろよカス\n" +\
+                "```"
+        
+        text = ""
+        for i in range(number):
+            text += f"{self.meigen_list[index_list[i]]}\n"
+        
+        return text

@@ -1,4 +1,5 @@
 import discord
+import random
 
 from IroIroBot.Command.CommandParameters import CommandParameters
 from IroIroBot.Command.Meigen.MeigenSubcommandBase import MeigenSubcommandBase
@@ -6,22 +7,20 @@ from IroIroBot.Command.Meigen.MeigenHolder import MeigenHolder
 
 
 
-class DelSubcommand(MeigenSubcommandBase):
-    COMMAND = "del"
-    TEMPLATE = f"{{prefix}}{{command}} {COMMAND} [添字]"
+class RandomSubcommand(MeigenSubcommandBase):
+    DEFAULT_NUM = 1
+    
+    COMMAND = "random"
+    TEMPLATE = f"{{prefix}}{{command}} {COMMAND} [表示数={DEFAULT_NUM}]"
     HELP =  f"{TEMPLATE}\n" +\
-            "   MEIGENを削除するよ！\n" +\
-            "   添字が指定されていない場合は最新のものを削除するよn"
+            "   MEIGENをランダム表示するよ！\n"
 
 
     async def run(self, params: CommandParameters):
-        holder = MeigenHolder()
-        
         words = params.args.split()
         if len(words) < 1:
-            # 引数の指定がない場合、新しいものを削除
             await params.send(
-                await holder.delete(len(holder.meigen_list))
+                MeigenHolder().random(RandomSubcommand.DEFAULT_NUM)
             )
             return
 
@@ -35,5 +34,5 @@ class DelSubcommand(MeigenSubcommandBase):
             return
 
         await params.send(
-            await holder.delete(int(words[0]))
+            MeigenHolder().random(int(words[0]))
         )

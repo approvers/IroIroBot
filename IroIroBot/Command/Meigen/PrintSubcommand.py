@@ -10,10 +10,9 @@ class PrintSubcommand(MeigenSubcommandBase):
     DEFAULT_NUM = 5
 
     COMMAND = "print"
-    TEMPLATE = "{{prefix}}{{command}} {subcommand} [表示数={default_num}]" \
-        .format(subcommand=COMMAND, default_num=DEFAULT_NUM)
-    HELP = "{TEMPLATE}\n\
-        MEIGENを表示するよ！"
+    TEMPLATE = f"{{prefix}}{{command}} {COMMAND} [表示数={DEFAULT_NUM}]"
+    HELP = f"{TEMPLATE}\n" +\
+            "   MEIGENを表示するよ！"
 
 
     async def run(self, params: CommandParameters):
