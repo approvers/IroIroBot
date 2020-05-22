@@ -11,7 +11,7 @@ class DelSubcommand(MeigenSubcommandBase):
     TEMPLATE = f"{{prefix}}{{command}} {COMMAND} [添字]"
     HELP =  f"{TEMPLATE}\n" +\
             "   MEIGENを削除するよ！\n" +\
-            "   添字が指定されていない場合は最新のものを削除するよn"
+            "   添字が指定されていない場合は最新のものを削除するよ\n"
 
 
     async def run(self, params: CommandParameters):

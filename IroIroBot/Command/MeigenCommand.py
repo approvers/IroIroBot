@@ -36,4 +36,16 @@ class MeigenCommand(CommandBase):
         await MeigenAddCommand(params.message.channel, params.args).run()
         
     async def send_help(self, channel: discord.TextChannel, prefix: str):
-        pass
+        text =  f"{prefix}{MeigenCommand.COMMAND} [発言者] [内容]\n" +\
+                f"{prefix}{MeigenCommand.COMMAND} id [メッセージID]\n" +\
+                "   MEIGENを追加するよ！かわいいね！！\n"
+
+        for subcommand in self.subcommands:
+            text += "\n" + subcommand.HELP.format(
+                prefix=prefix, 
+                command=MeigenCommand.COMMAND
+            )
+
+        await channel.send(
+            "```" + text + "```"
+        )

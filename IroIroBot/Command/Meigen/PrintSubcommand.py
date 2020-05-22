@@ -12,7 +12,7 @@ class PrintSubcommand(MeigenSubcommandBase):
     COMMAND = "print"
     TEMPLATE = f"{{prefix}}{{command}} {COMMAND} [表示数={DEFAULT_NUM}]"
     HELP = f"{TEMPLATE}\n" +\
-            "   MEIGENを表示するよ！"
+            "   MEIGENを表示するよ！\n"
 
 
     async def run(self, params: CommandParameters):
