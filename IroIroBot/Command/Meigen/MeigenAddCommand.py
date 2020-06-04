@@ -6,6 +6,7 @@ from IroIroBot.Command.Meigen.MeigenHolder import MeigenHolder
 
 class MeigenAddCommand:
     ID_OPTION = "id"
+    MESSAGE_ID_MAX = 9223372036854775807
     
 
     def __init__(self, channel: discord.TextChannel, args: str):
@@ -21,6 +22,15 @@ class MeigenAddCommand:
                 "   IDを指定しろカス\n" +\
                 "```"
             )
+        return
+
+    async def _send_max_over_err(self):
+        await self.send(
+            "```\n" +\
+            "†キレた†\n" +\
+            "   指定したIDが不適切だカス\n" +\
+            "```"
+        )
         return
 
     async def _send_not_found_err(self):
@@ -56,11 +66,16 @@ class MeigenAddCommand:
 
         if self.words[0] == MeigenAddCommand.ID_OPTION:
             if not self.words[1].isdecimal():
-                self._send_not_decimal_err()
+                await self._send_not_decimal_err()
                 return
 
             try:
-                meigen_message = await self.fetch_message(int(self.words[1]))
+                message_id = int(self.words[1])
+                if (message_id > self.MESSAGE_ID_MAX):
+                    await self._send_max_over_err()
+                    return
+
+                meigen_message = await self.fetch_message()
 
             except discord.errors.NotFound:
                 await self._send_not_found_err()
